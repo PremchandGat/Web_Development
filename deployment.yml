@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+  labels:
+    app: webserver
+    prod: IN
+spec:
+  selector:
+    matchLabels:
+      app: webserver
+      prod: IN
+  template:
+    metadata:
+      labels:
+        app: webserver
+        prod: IN
+    spec:
+      volumes:
+         - name: webserverpv
+           persistentVolumeClaim:
+               claimName: webserver-pvc
+      containers:
+      - name:  webserver
+        image: httpd
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: "/usr/local/apache2/htdocs/"
+            name: webserverpv
